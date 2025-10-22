@@ -1,5 +1,7 @@
 # @creativoma/liquid-glass
 
+![Screenshot](public/screenshot.jpeg)
+
 A modern React component with liquid frosted glass effect using TailwindCSS. Perfect for creating elegant interfaces with glassmorphism effect.
 
 [![npm version](https://img.shields.io/npm/v/@creativoma/liquid-glass.svg)](https://www.npmjs.com/package/@creativoma/liquid-glass)
