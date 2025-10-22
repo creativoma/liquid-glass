@@ -225,15 +225,6 @@ Contributions are welcome! Please:
 
 MIT © [creativoma](https://github.com/creativoma)
 
-## 🏷️ Changelog
+## 📜 Changelog
 
-### 1.0.0
-
-- First version of LiquidGlass component
-- Frosted glass effect with backdrop-filter
-- Animated liquid effect with SVG filters (feTurbulence + feDisplacementMap)
-- Full customization of liquid effect (displacement scale, turbulence frequency, seed)
-- Support for polymorphic component with `as` prop
-- Full integration with TailwindCSS
-- Optimized build with tree-shaking
-- Full TypeScript support
+See [CHANGELOG.md](./CHANGELOG.md) for a detailed list of changes.
