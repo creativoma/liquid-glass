@@ -1,6 +1,6 @@
 {
   "name": "@creativoma/liquid-glass",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "description": "A React wrapper component with liquid frosted glass effect using TailwindCSS",
   "main": "dist/index.js",
