@@ -144,7 +144,8 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
           style={{
             backdropFilter: `blur(${backdropBlur}px)`,
             WebkitBackdropFilter: `blur(${backdropBlur}px)`,
-            filter: useSimplifiedFilter ? `url(#${cleanFilterId})` : `url(#${cleanFilterId})`,
+            filter: `url(#${cleanFilterId})`,
+            isolation: 'isolate',
             ...(useSimplifiedFilter && {
               // Additional CSS-based effects for Safari/iOS to enhance the liquid glass appearance
               transform: 'translateZ(0)',
