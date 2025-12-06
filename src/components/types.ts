@@ -1,7 +1,9 @@
 import { ReactNode, CSSProperties, ElementType, HTMLAttributes } from 'react'
 
-export interface LiquidGlassProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'as'> {
+export interface LiquidGlassProps extends Omit<
+  HTMLAttributes<HTMLElement>,
+  'as'
+> {
   /** Content to display inside the glass container */
   children?: ReactNode
 
