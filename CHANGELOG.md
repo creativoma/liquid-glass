@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-02-14
+
+### Performance
+
+- Removed demo CSS from library bundle, reducing package size by 13.5% (69.4 kB → 60 kB unpacked)
+- Library now ships without CSS as component uses only inline styles
+- Demo styles remain available in development mode
+
 ## [1.1.0] - 2026-02-14
 
 ### Added
