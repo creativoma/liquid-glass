@@ -1,12 +1,24 @@
 # @creativoma/liquid-glass
 
-![Screenshot](public/screenshot.jpeg)
-
-A modern React component with liquid frosted glass effect using TailwindCSS. Perfect for creating elegant interfaces with glassmorphism effect.
-
 [![npm version](https://img.shields.io/npm/v/@creativoma/liquid-glass.svg)](https://www.npmjs.com/package/@creativoma/liquid-glass)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://reactjs.org/)
 
-## 🚀 Installation
+A modern React component library featuring liquid frosted glass effect using TailwindCSS and SVG filters. Create elegant glassmorphism interfaces with advanced visual effects.
+
+## Features
+
+- Liquid frosted glass effect with customizable displacement mapping
+- Full TypeScript support with comprehensive type definitions
+- TailwindCSS integration for seamless styling
+- Polymorphic component API (render as any HTML element)
+- Cross-browser compatible with Safari/iOS fallback support
+- Customizable blur, tint, and turbulence parameters
+- Zero dependencies (peer dependencies only)
+- ESM and UMD formats for maximum compatibility
+
+## Installation
 
 ```bash
 npm install @creativoma/liquid-glass
@@ -20,7 +32,7 @@ yarn add @creativoma/liquid-glass
 pnpm add @creativoma/liquid-glass
 ```
 
-## 📖 Basic Usage
+## Quick Start
 
 ```jsx
 import { LiquidGlass } from '@creativoma/liquid-glass'
@@ -37,7 +49,9 @@ function App() {
 }
 ```
 
-## ⚙️ Props
+## API Reference
+
+### Props
 
 | Prop                      | Type              | Default                     | Description                                           |
 | ------------------------- | ----------------- | --------------------------- | ----------------------------------------------------- |
@@ -51,7 +65,7 @@ function App() {
 | `as`                      | `ElementType`     | `'div'`                     | HTML component to render (div, button, section, etc.) |
 | `style`                   | `CSSProperties`   | -                           | Additional inline styles                              |
 
-## 💡 Advanced Examples
+## Usage Examples
 
 ### Card with glass effect
 
@@ -137,7 +151,7 @@ function App() {
 </LiquidGlass>
 ```
 
-## 🛠️ Development
+## Development
 
 ```bash
 # Clone the repository
@@ -167,7 +181,7 @@ pnpm run preview
 npm publish
 ```
 
-## 🧪 Project Structure
+## Project Structure
 
 ```
 liquid-glass/
@@ -189,13 +203,13 @@ liquid-glass/
 └── tailwind.config.js
 ```
 
-## 📋 Requirements
+## Requirements
 
 - React >= 18.0.0
 - React DOM >= 18.0.0
 - TailwindCSS (component uses Tailwind classes)
 
-## 🏗️ Technologies
+## Technologies
 
 - **React** - Component library
 - **TypeScript** - Static typing
@@ -203,7 +217,7 @@ liquid-glass/
 - **Tailwind CSS** - CSS framework for glassmorphism effect
 - **SVG Filters** - Advanced visual effects with feTurbulence and feDisplacementMap
 
-## 📦 Available Formats
+## Package Formats
 
 This package includes multiple formats for maximum compatibility:
 
@@ -211,7 +225,7 @@ This package includes multiple formats for maximum compatibility:
 - **UMD** (`dist/index.umd.js`) - For universal compatibility
 - **TypeScript** (`dist/index.d.ts`) - Type definitions
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please:
 
@@ -221,10 +235,10 @@ Contributions are welcome! Please:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 MIT © [creativoma](https://github.com/creativoma)
 
-## 📜 Changelog
+## Changelog
 
 See [CHANGELOG.md](./CHANGELOG.md) for a detailed list of changes.
