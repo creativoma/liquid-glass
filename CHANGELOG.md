@@ -20,7 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated package.json exports field: moved `types` condition first for better TypeScript compatibility
 - Updated package.json paths to use relative `./` prefix for improved module resolution
 - Updated major dependencies:
-  - ESLint `^9.39.1` → `^10.0.1`
   - `eslint-plugin-react-hooks` `^5.2.0` → `^7.0.1`
   - `@vitejs/plugin-react` `^4.7.0` → `^5.1.4`
 - Updated minor dependencies:
