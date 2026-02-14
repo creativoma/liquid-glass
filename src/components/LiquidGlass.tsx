@@ -1,21 +1,6 @@
-import { FC, useId, useState, useEffect } from 'react'
+import { FC, useId } from 'react'
 import type { LiquidGlassProps } from './types'
-
-/**
- * Detects if the browser has limited SVG filter support (Safari/iOS)
- * Uses feature detection combined with user agent as fallback
- */
-const hasLimitedFilterSupport = (): boolean => {
-  if (typeof window === 'undefined') return false
-
-  // Check for Safari/iOS using user agent as a practical approach
-  // since feDisplacementMap support detection is complex and unreliable
-  const ua = window.navigator.userAgent
-  const isIOS = /iPad|iPhone|iPod/.test(ua)
-  const isSafari = /^((?!chrome|android).)*safari/i.test(ua)
-
-  return isIOS || isSafari
-}
+import { useBrowserDetection } from '../hooks/useBrowserDetection'
 
 const LiquidGlass: FC<LiquidGlassProps> = ({
   children,
@@ -31,17 +16,11 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
 }) => {
   const filterId = useId()
   const cleanFilterId = `liquid-glass-${filterId.replace(/:/g, '-')}`
-
-  // Detect filter support on mount (client-side only)
-  const [useSimplifiedFilter, setUseSimplifiedFilter] = useState(false)
-
-  useEffect(() => {
-    setUseSimplifiedFilter(hasLimitedFilterSupport())
-  }, [])
+  const { useSimplifiedFilter } = useBrowserDetection()
 
   return (
     <>
-      <svg style={{ display: 'none' }}>
+      <svg style={{ display: 'none' }} suppressHydrationWarning>
         {useSimplifiedFilter ? (
           // Simplified filter for Safari/iOS - uses only well-supported primitives
           <filter
