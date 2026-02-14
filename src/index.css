@@ -1,1 +1,317 @@
 @import 'tailwindcss';
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,700,900&display=swap');
+
+@layer base {
+  :root {
+    /* Blue/Purple Liquid Palette - Original vibes enhanced */
+    --color-void: #0a0f1e;
+    --color-void-light: #1a1f35;
+    --color-electric-blue: #3b82f6;
+    --color-electric-purple: #a855f7;
+    --color-cyan-glow: #22d3ee;
+    --color-indigo-deep: #4f46e5;
+    --color-violet-bright: #8b5cf6;
+    --color-sky-light: #60a5fa;
+    --color-white-ghost: #f5f5f5;
+
+    /* Complex Gradients */
+    --gradient-void: radial-gradient(ellipse at top, #1a1f35, #0a0f1e);
+    --gradient-electric: linear-gradient(
+      135deg,
+      var(--color-electric-purple) 0%,
+      var(--color-cyan-glow) 100%
+    );
+    --gradient-ocean: linear-gradient(
+      135deg,
+      var(--color-electric-blue) 0%,
+      var(--color-indigo-deep) 100%
+    );
+    --gradient-mesh:
+      radial-gradient(at 20% 30%, rgba(139, 92, 246, 0.2) 0px, transparent 50%),
+      radial-gradient(at 80% 70%, rgba(59, 130, 246, 0.2) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(79, 70, 229, 0.15) 0px, transparent 50%);
+  }
+
+  body {
+    font-family:
+      'Satoshi',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
+    background: var(--color-void);
+    color: var(--color-white-ghost);
+    overflow-x: hidden;
+    position: relative;
+    cursor: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Clash Display', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+
+  /* Custom Cursor */
+  .custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-electric-purple);
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.15s ease;
+  }
+
+  .custom-cursor::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 1px solid var(--color-white-ghost);
+    opacity: 0.3;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Clash Display', system-ui, sans-serif;
+  }
+
+  .font-body {
+    font-family:
+      'Satoshi',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
+  }
+
+  /* Gradient Text Effects */
+  .text-gradient-electric {
+    background: var(--gradient-electric);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-ocean {
+    background: var(--gradient-ocean);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Background mesh gradient */
+  .bg-mesh {
+    background: var(--gradient-mesh);
+  }
+
+  /* Enhanced noise overlay - more visible */
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+  }
+
+  /* Organic blob backgrounds */
+  .blob {
+    position: absolute;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+    animation: morph 20s ease-in-out infinite;
+  }
+
+  @keyframes morph {
+    0%,
+    100% {
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+      transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      transform: translate(50px, -50px) rotate(90deg);
+    }
+    50% {
+      border-radius: 30% 70% 50% 50% / 50% 60% 40% 60%;
+      transform: translate(-30px, 30px) rotate(180deg);
+    }
+    75% {
+      border-radius: 70% 30% 60% 40% / 30% 70% 50% 50%;
+      transform: translate(30px, 50px) rotate(270deg);
+    }
+  }
+
+  /* Liquid float animation - more dramatic */
+  @keyframes liquid-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-30px) rotate(2deg);
+    }
+    50% {
+      transform: translateY(-15px) rotate(-2deg);
+    }
+    75% {
+      transform: translateY(-40px) rotate(1deg);
+    }
+  }
+
+  .animate-liquid-float {
+    animation: liquid-float 8s ease-in-out infinite;
+  }
+
+  /* Fade and scale entrance */
+  @keyframes fade-scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .animate-fade-scale-in {
+    animation: fade-scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Pulse glow effect */
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.7);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  /* Rotate infinite */
+  @keyframes rotate-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-rotate-slow {
+    animation: rotate-slow 30s linear infinite;
+  }
+
+  /* Stagger delays - extended */
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+  .delay-600 {
+    animation-delay: 600ms;
+  }
+  .delay-700 {
+    animation-delay: 700ms;
+  }
+  .delay-800 {
+    animation-delay: 800ms;
+  }
+  .delay-1000 {
+    animation-delay: 1000ms;
+  }
+  .delay-1200 {
+    animation-delay: 1200ms;
+  }
+
+  /* Enhanced glass border with glow */
+  .glass-border-glow {
+    position: relative;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+  }
+
+  .glass-border-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.4),
+      transparent,
+      rgba(59, 130, 246, 0.4)
+    );
+    border-radius: inherit;
+    padding: 2px;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .glass-border-glow:hover::before {
+    opacity: 1;
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    transition:
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-8px) rotate(-1deg);
+    box-shadow: 0 20px 60px rgba(168, 85, 247, 0.3);
+  }
+
+  /* Text shimmer on hover */
+  .shimmer-text {
+    background-size: 200% auto;
+    background: linear-gradient(
+      90deg,
+      #f5f5f5 25%,
+      var(--color-electric-purple) 50%,
+      #f5f5f5 75%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer-slide 3s linear infinite;
+  }
+
+  @keyframes shimmer-slide {
+    to {
+      background-position: 200% center;
+    }
+  }
+}
