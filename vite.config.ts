@@ -3,6 +3,11 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@creativoma/liquid-glass': '/src/index.ts',
+    },
+  },
   build: {
     outDir: 'dist',
     rollupOptions: {

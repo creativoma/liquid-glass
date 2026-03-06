@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-03-07
+
+### Added
+
+- Full test suite with Vitest and jsdom:
+  - `src/components/LiquidGlass.test.tsx` — 27 tests covering rendering, wrapper styles, props, default values, Safari simplified filter, and layer structure
+  - `src/hooks/useBrowserDetection.test.ts` — 8 tests covering Chrome, Firefox, Edge, Safari macOS, iPhone, iPad, iPod, and render stability
+  - `src/test/setup.ts` — global test setup with `@testing-library/jest-dom`
+  - `vitest.config.ts` — Vitest configuration with jsdom environment and v8 coverage
+- Static HTML demo pages:
+  - `demo/component.html` — standalone showcase of component variants
+  - `demo/filters.html` — interactive SVG filter debugger
+
+### Changed
+
+- Interactive demo app (`src/App.tsx`): added live sliders to control `backdropBlur` and `tintColor` opacity in real time, with a code preview that updates dynamically
+
 ## [1.1.3] - 2026-03-06
 
 ### Security

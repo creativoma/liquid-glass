@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LiquidGlass — Component Variants</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #06080f;
+        color: #e2e8f0;
+        min-height: 100vh;
+        padding: 40px 32px;
+      }
+
+      header {
+        margin-bottom: 48px;
+      }
+      header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin-bottom: 6px;
+        background: linear-gradient(135deg, #a78bfa, #38bdf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      header p {
+        font-size: 0.875rem;
+        color: #475569;
+      }
+      header code {
+        font-family: monospace;
+        color: #818cf8;
+        background: rgba(99, 102, 241, 0.1);
+        padding: 1px 5px;
+        border-radius: 4px;
+      }
+
+      .section {
+        margin-bottom: 48px;
+      }
+      .section-title {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #475569;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+      }
+
+      /* Scene container (colorful background behind each glass) */
+      .card-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .card-name {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #475569;
+      }
+
+      .scene {
+        position: relative;
+        height: 180px;
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Background scenes */
+      .s-purple {
+        background: linear-gradient(135deg, #581c87, #1e40af, #0e7490);
+      }
+      .s-warm {
+        background: linear-gradient(135deg, #92400e, #7c2d12, #4c1d95);
+      }
+      .s-green {
+        background: linear-gradient(135deg, #064e3b, #1e3a5f, #312e81);
+      }
+      .s-pink {
+        background: linear-gradient(135deg, #831843, #4c1d95, #1e3a5f);
+      }
+      .s-dark {
+        background: linear-gradient(135deg, #0f172a, #1e1b4b, #0c2340);
+      }
+      .s-vibrant {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed, #0e7490);
+      }
+
+      /* Text pattern in background */
+      .scene::before {
+        content: 'LIQUID GLASS REACT SVG FILTER BLUR FROST MORPH WAVE GLOW FLUID DARK LIQUID GLASS REACT SVG FILTER';
+        position: absolute;
+        inset: 0;
+        padding: 16px;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.12);
+        word-break: break-all;
+        line-height: 1.8;
+        overflow: hidden;
+      }
+
+      /* ─── Glass element (mirrors LiquidGlass component output) ─── */
+      .glass {
+        position: relative;
+        overflow: hidden;
+        box-shadow:
+          0 6px 6px rgba(0, 0, 0, 0.2),
+          0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 14px;
+        min-width: 160px;
+        padding: 18px 24px;
+      }
+      .glass-bd {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        isolation: isolate;
+      }
+      .glass-tint {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
+      .glass-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+      }
+      .glass-prop {
+        font-size: 0.6875rem;
+        color: rgba(255, 255, 255, 0.5);
+        font-family: monospace;
+        margin-bottom: 4px;
+      }
+      .glass-val {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      /* SVG filters hidden */
+      .filters {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>LiquidGlass — Variants</h1>
+      <p>
+        Visual debug for all component props. No build step required — pure HTML
+        replicating the component's DOM output.
+      </p>
+    </header>
+
+    <!-- Hidden SVG with named filters for each variant -->
+    <svg class="filters" xmlns="http://www.w3.org/2000/svg">
+      <!-- Full filter (default) -->
+      <filter
+        id="vf-default"
+        x="0%"
+        y="0%"
+        width="100%"
+        height="100%"
+        filterUnits="objectBoundingBox"
+      >
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.008 0.008"
+          numOctaves="1"
+          seed="1.5"
+          result="t"
+        />
+        <feComponentTransfer in="t" result="m">
+          <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
+          <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
+          <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
+        </feComponentTransfer>
+        <feGaussianBlur in="t" stdDeviation="3" result="s" />
+        <feSpecularLighting
+          in="s"
+          surfaceScale="5"
+          specularConstant="1"
+          specularExponent="100"
+          lightingColor="white"
+          result="l"
+        >
+          <fePointLight x="-200" y="-200" z="300" />
+        </feSpecularLighting>
+        <feComposite
+          in="l"
+          operator="arithmetic"
+          k1="0"
+          k2="1"
+          k3="1"
+          k4="0"
+          result="li"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="s"
+          scale="150"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+
+      <!-- Low displacement (scale=30) -->
+      <filter
+        id="vf-low-disp"
+        x="0%"
+        y="0%"
+        width="100%"
+        height="100%"
+        filterUnits="objectBoundingBox"
+      >
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.008 0.008"
+          numOctaves="1"
+          seed="1.5"
+          result="t"
+        />
+        <feComponentTransfer in="t" result="m">
+          <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
+          <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
+          <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
+        </feComponentTransfer>
+        <feGaussianBlur in="t" stdDeviation="3" result="s" />
+        <feSpecularLighting
+          in="s"
+          surfaceScale="5"
+          specularConstant="1"
+          specularExponent="100"
+          lightingColor="white"
+          result="l"
+        >
+          <fePointLight x="-200" y="-200" z="300" />
+        </feSpecularLighting>
+        <feComposite
+          in="l"
+          operator="arithmetic"
+          k1="0"
+          k2="1"
+          k3="1"
+          k4="0"
+          result="li"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="s"
+          scale="30"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+
+      <!-- High displacement (scale=300) -->
+      <filter
+        id="vf-high-disp"
+        x="0%"
+        y="0%"
+        width="100%"
+        height="100%"
+        filterUnits="objectBoundingBox"
+      >
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.008 0.008"
+          numOctaves="1"
+          seed="1.5"
+          result="t"
+        />
+        <feComponentTransfer in="t" result="m">
+          <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
+          <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
+          <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
+        </feComponentTransfer>
+        <feGaussianBlur in="t" stdDeviation="3" result="s" />
+        <feSpecularLighting
+          in="s"
+          surfaceScale="5"
+          specularConstant="1"
+          specularExponent="100"
+          lightingColor="white"
+          result="l"
+        >
+          <fePointLight x="-200" y="-200" z="300" />
+        </feSpecularLighting>
+        <feComposite
+          in="l"
+          operator="arithmetic"
+          k1="0"
+          k2="1"
+          k3="1"
+          k4="0"
+          result="li"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="s"
+          scale="300"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+
+      <!-- Fine noise (high frequency) -->
+      <filter
+        id="vf-fine"
+        x="0%"
+        y="0%"
+        width="100%"
+        height="100%"
+        filterUnits="objectBoundingBox"
+      >
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.04 0.04"
+          numOctaves="1"
+          seed="1.5"
+          result="t"
+        />
+        <feComponentTransfer in="t" result="m">
+          <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
+          <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
+          <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
+        </feComponentTransfer>
+        <feGaussianBlur in="t" stdDeviation="3" result="s" />
+        <feSpecularLighting
+          in="s"
+          surfaceScale="5"
+          specularConstant="1"
+          specularExponent="100"
+          lightingColor="white"
+          result="l"
+        >
+          <fePointLight x="-200" y="-200" z="300" />
+        </feSpecularLighting>
+        <feComposite
+          in="l"
+          operator="arithmetic"
+          k1="0"
+          k2="1"
+          k3="1"
+          k4="0"
+          result="li"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="s"
+          scale="150"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+
+      <!-- Big waves (low frequency) -->
+      <filter
+        id="vf-waves"
+        x="0%"
+        y="0%"
+        width="100%"
+        height="100%"
+        filterUnits="objectBoundingBox"
+      >
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.002 0.002"
+          numOctaves="1"
+          seed="1.5"
+          result="t"
+        />
+        <feComponentTransfer in="t" result="m">
+          <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
+          <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
+          <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
+        </feComponentTransfer>
+        <feGaussianBlur in="t" stdDeviation="3" result="s" />
+        <feSpecularLighting
+          in="s"
+          surfaceScale="5"
+          specularConstant="1"
+          specularExponent="100"
+          lightingColor="white"
+          result="l"
+        >
+          <fePointLight x="-200" y="-200" z="300" />
+        </feSpecularLighting>
+        <feComposite
+          in="l"
+          operator="arithmetic"
+          k1="0"
+          k2="1"
+          k3="1"
+          k4="0"
+          result="li"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="s"
+          scale="150"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+
+      <!-- Safari simplified -->
+      <filter
+        id="vf-safari"
+        x="-20%"
+        y="-20%"
+        width="140%"
+        height="140%"
+        filterUnits="objectBoundingBox"
+      >
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.008 0.008"
+          numOctaves="2"
+          seed="1.5"
+          result="t"
+        />
+        <feGaussianBlur in="t" stdDeviation="2" result="b" />
+        <feColorMatrix
+          in="b"
+          type="matrix"
+          values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.15 0"
+          result="tr"
+        />
+        <feBlend in="SourceGraphic" in2="tr" mode="normal" />
+      </filter>
+    </svg>
+
+    <!-- Variants grid -->
+    <div class="section">
+      <div class="section-title">Prop Variants</div>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <script>
+      const variants = [
+        {
+          name: 'Default',
+          scene: 's-purple',
+          filterId: 'vf-default',
+          blur: 2,
+          tint: 'rgba(255,255,255,0.12)',
+          props: 'backdropBlur={2}',
+        },
+        {
+          name: 'High backdrop blur',
+          scene: 's-green',
+          filterId: 'vf-default',
+          blur: 14,
+          tint: 'rgba(255,255,255,0.1)',
+          props: 'backdropBlur={14}',
+        },
+        {
+          name: 'Dark tint',
+          scene: 's-purple',
+          filterId: 'vf-default',
+          blur: 4,
+          tint: 'rgba(0,0,0,0.45)',
+          props: 'tintColor="rgba(0,0,0,0.45)"',
+        },
+        {
+          name: 'No tint',
+          scene: 's-warm',
+          filterId: 'vf-default',
+          blur: 6,
+          tint: 'rgba(0,0,0,0)',
+          props: 'tintColor="rgba(0,0,0,0)"',
+        },
+        {
+          name: 'Purple tint',
+          scene: 's-dark',
+          filterId: 'vf-default',
+          blur: 3,
+          tint: 'rgba(168,85,247,0.25)',
+          props: 'tintColor="rgba(168,85,247,0.25)"',
+        },
+        {
+          name: 'Low displacement',
+          scene: 's-vibrant',
+          filterId: 'vf-low-disp',
+          blur: 2,
+          tint: 'rgba(255,255,255,0.1)',
+          props: 'displacementScale={30}',
+        },
+        {
+          name: 'High displacement',
+          scene: 's-pink',
+          filterId: 'vf-high-disp',
+          blur: 2,
+          tint: 'rgba(255,255,255,0.08)',
+          props: 'displacementScale={300}',
+        },
+        {
+          name: 'Fine noise',
+          scene: 's-green',
+          filterId: 'vf-fine',
+          blur: 4,
+          tint: 'rgba(255,255,255,0.12)',
+          props: 'turbulenceBaseFrequency="0.04 0.04"',
+        },
+        {
+          name: 'Big waves',
+          scene: 's-warm',
+          filterId: 'vf-waves',
+          blur: 2,
+          tint: 'rgba(59,130,246,0.2)',
+          props: 'turbulenceBaseFrequency="0.002 0.002"',
+        },
+        {
+          name: 'Safari filter',
+          scene: 's-purple',
+          filterId: 'vf-safari',
+          blur: 3,
+          tint: 'rgba(255,255,255,0.15)',
+          props: '(simplified — Safari/iOS)',
+          safari: true,
+        },
+        {
+          name: 'Max blur + tint',
+          scene: 's-vibrant',
+          filterId: 'vf-default',
+          blur: 20,
+          tint: 'rgba(255,255,255,0.18)',
+          props: 'backdropBlur={20}',
+        },
+        {
+          name: 'Minimal glass',
+          scene: 's-pink',
+          filterId: 'vf-default',
+          blur: 1,
+          tint: 'rgba(255,255,255,0.05)',
+          props: 'backdropBlur={1} tint={0.05}',
+        },
+      ]
+
+      const grid = document.getElementById('grid')
+
+      variants.forEach(
+        ({ name, scene, filterId, blur, tint, props, safari }) => {
+          const blurVal = `blur(${blur}px)`
+
+          const wrap = document.createElement('div')
+          wrap.className = 'card-wrap'
+
+          const nameEl = document.createElement('div')
+          nameEl.className = 'card-name'
+          nameEl.textContent = name
+
+          const sceneEl = document.createElement('div')
+          sceneEl.className = `scene ${scene}`
+
+          const glassEl = document.createElement('div')
+          glassEl.className = 'glass'
+
+          const bd = document.createElement('div')
+          bd.className = 'glass-bd'
+          bd.style.filter = `url(#${filterId})`
+          bd.style.backdropFilter = blurVal
+          bd.style.webkitBackdropFilter = blurVal
+          if (safari) {
+            bd.style.transform = 'translateZ(0)'
+            bd.style.willChange = 'transform'
+          }
+
+          const tintEl = document.createElement('div')
+          tintEl.className = 'glass-tint'
+          tintEl.style.background = tint
+
+          const content = document.createElement('div')
+          content.className = 'glass-content'
+          content.innerHTML = `
+          <div class="glass-prop">${props}</div>
+          <div class="glass-val">Liquid Glass</div>
+        `
+
+          glassEl.appendChild(bd)
+          glassEl.appendChild(tintEl)
+          glassEl.appendChild(content)
+          sceneEl.appendChild(glassEl)
+          wrap.appendChild(nameEl)
+          wrap.appendChild(sceneEl)
+          grid.appendChild(wrap)
+        }
+      )
+    </script>
+  </body>
+</html>

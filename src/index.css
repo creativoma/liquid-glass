@@ -45,6 +45,12 @@
     cursor: none;
   }
 
+  @media (pointer: coarse) {
+    body {
+      cursor: auto;
+    }
+  }
+
   h1,
   h2,
   h3,
@@ -248,6 +254,43 @@
   }
   .delay-1200 {
     animation-delay: 1200ms;
+  }
+
+  /* Range slider */
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-electric-purple);
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .slider::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 14px rgba(168, 85, 247, 0.9);
+  }
+
+  .slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-electric-purple);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
   }
 
   /* Enhanced glass border with glow */

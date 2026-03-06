@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LiquidGlass — Filter Debug</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #06080f;
+        color: #e2e8f0;
+        height: 100vh;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 300px;
+      }
+
+      /* ── Scene ─────────────────────────────────── */
+      .scene {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .bg {
+        position: absolute;
+        inset: 0;
+        background: #06080f;
+      }
+
+      .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: drift linear infinite;
+        will-change: transform;
+      }
+      .b1 {
+        width: 500px;
+        height: 500px;
+        background: #7c3aed;
+        opacity: 0.55;
+        top: -10%;
+        left: -10%;
+        animation-duration: 22s;
+      }
+      .b2 {
+        width: 400px;
+        height: 400px;
+        background: #2563eb;
+        opacity: 0.5;
+        top: 30%;
+        right: -8%;
+        animation-duration: 28s;
+        animation-delay: -8s;
+      }
+      .b3 {
+        width: 350px;
+        height: 350px;
+        background: #0891b2;
+        opacity: 0.45;
+        bottom: -5%;
+        left: 35%;
+        animation-duration: 18s;
+        animation-delay: -14s;
+      }
+      .b4 {
+        width: 280px;
+        height: 280px;
+        background: #db2777;
+        opacity: 0.3;
+        bottom: 10%;
+        left: 5%;
+        animation-duration: 32s;
+        animation-delay: -5s;
+      }
+
+      @keyframes drift {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+          transform: translate(60px, -40px) rotate(90deg);
+        }
+        50% {
+          transform: translate(-30px, 60px) rotate(180deg);
+        }
+        75% {
+          transform: translate(40px, 30px) rotate(270deg);
+        }
+        100% {
+          transform: translate(0, 0) rotate(360deg);
+        }
+      }
+
+      /* Text grid behind the glass — makes distortion obvious */
+      .bg-text {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        gap: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .bg-text-inner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px 32px;
+        padding: 40px;
+        justify-content: center;
+        opacity: 0.18;
+      }
+      .bg-text-inner span {
+        font-size: 1.125rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #fff;
+        white-space: nowrap;
+      }
+
+      /* ── Glass element ──────────────────────────── */
+      .glass-wrap {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 48px;
+      }
+
+      .glass {
+        position: relative;
+        overflow: hidden;
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.4),
+          0 0 0 1px rgba(255, 255, 255, 0.08);
+        width: 280px;
+        height: 200px;
+        border-radius: 20px;
+      }
+      .glass-backdrop {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        isolation: isolate;
+      }
+      .glass-tint {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .glass-inner {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 20px;
+      }
+      .glass-label {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .glass-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .comparison {
+        display: flex;
+        gap: 24px;
+      }
+      .comparison .glass {
+        width: 200px;
+        height: 150px;
+        border-radius: 16px;
+      }
+      .comparison-label {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      /* ── Controls ───────────────────────────────── */
+      .panel {
+        background: #0d1120;
+        border-left: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 20px 18px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .panel-title {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border-radius: 9999px;
+        margin-bottom: 14px;
+        margin-top: 8px;
+      }
+      .badge-chrome {
+        background: rgba(99, 102, 241, 0.2);
+        color: #818cf8;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+      }
+      .badge-safari {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.25);
+      }
+
+      .row {
+        margin-bottom: 14px;
+      }
+      .row-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+      .row-header label {
+        font-size: 0.75rem;
+        color: #94a3b8;
+      }
+      .row-header span {
+        font-size: 0.75rem;
+        color: #818cf8;
+        font-variant-numeric: tabular-nums;
+        font-family: monospace;
+      }
+      input[type='range'] {
+        width: 100%;
+        height: 4px;
+        accent-color: #818cf8;
+        cursor: pointer;
+      }
+
+      hr.sep {
+        border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        margin: 16px 0;
+      }
+
+      .browser-chip {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        z-index: 20;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 9999px;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #94a3b8;
+      }
+      .browser-chip strong {
+        color: #a78bfa;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Scene -->
+    <div class="scene">
+      <div class="bg">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+        <div class="blob b4"></div>
+        <div class="bg-text">
+          <div class="bg-text-inner" id="bg-text-grid"></div>
+        </div>
+      </div>
+
+      <div class="browser-chip" id="browser-chip">
+        Browser: <strong id="browser-name">—</strong>
+      </div>
+
+      <div class="glass-wrap">
+        <!-- Main glass -->
+        <div class="glass" id="glass-main">
+          <div class="glass-backdrop" id="backdrop-main"></div>
+          <div class="glass-tint" id="tint-main"></div>
+          <div class="glass-inner">
+            <span class="glass-label">Full filter</span>
+            <span class="glass-title">Liquid Glass</span>
+          </div>
+        </div>
+
+        <!-- Side by side -->
+        <div class="comparison">
+          <div>
+            <div class="glass" id="glass-chrome">
+              <div class="glass-backdrop" id="backdrop-chrome"></div>
+              <div class="glass-tint" id="tint-chrome"></div>
+              <div class="glass-inner">
+                <span class="glass-label">Chrome</span>
+                <span class="glass-title" style="font-size: 1rem"
+                  >Full filter</span
+                >
+              </div>
+            </div>
+            <div class="comparison-label" style="color: #818cf8">
+              feDisplacementMap
+            </div>
+          </div>
+          <div>
+            <div class="glass" id="glass-safari">
+              <div
+                class="glass-backdrop"
+                id="backdrop-safari"
+                style="transform: translateZ(0); will-change: transform"
+              ></div>
+              <div class="glass-tint" id="tint-safari"></div>
+              <div class="glass-inner">
+                <span class="glass-label">Safari</span>
+                <span class="glass-title" style="font-size: 1rem"
+                  >Simplified</span
+                >
+              </div>
+            </div>
+            <div class="comparison-label" style="color: #fbbf24">feBlend</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls panel -->
+    <div class="panel">
+      <div class="panel-title">Filter Parameters</div>
+
+      <span class="section-badge badge-chrome">Chrome / Firefox</span>
+
+      <div class="row">
+        <div class="row-header">
+          <label>Displacement Scale</label><span id="v-scale">150</span>
+        </div>
+        <input
+          type="range"
+          id="c-scale"
+          min="0"
+          max="500"
+          value="150"
+          step="10"
+        />
+      </div>
+      <div class="row">
+        <div class="row-header">
+          <label>Base Frequency X</label><span id="v-freqx">0.008</span>
+        </div>
+        <input
+          type="range"
+          id="c-freqx"
+          min="0.001"
+          max="0.05"
+          value="0.008"
+          step="0.001"
+        />
+      </div>
+      <div class="row">
+        <div class="row-header">
+          <label>Base Frequency Y</label><span id="v-freqy">0.008</span>
+        </div>
+        <input
+          type="range"
+          id="c-freqy"
+          min="0.001"
+          max="0.05"
+          value="0.008"
+          step="0.001"
+        />
+      </div>
+      <div class="row">
+        <div class="row-header">
+          <label>Turbulence Seed</label><span id="v-seed">1.5</span>
+        </div>
+        <input
+          type="range"
+          id="c-seed"
+          min="0"
+          max="20"
+          value="1.5"
+          step="0.5"
+        />
+      </div>
+      <div class="row">
+        <div class="row-header">
+          <label>Gaussian Blur</label><span id="v-gblur">3</span>
+        </div>
+        <input
+          type="range"
+          id="c-gblur"
+          min="0"
+          max="12"
+          value="3"
+          step="0.5"
+        />
+      </div>
+
+      <hr class="sep" />
+
+      <div class="row">
+        <div class="row-header">
+          <label>Backdrop Blur (px)</label><span id="v-backdrop">2</span>
+        </div>
+        <input
+          type="range"
+          id="c-backdrop"
+          min="0"
+          max="24"
+          value="2"
+          step="1"
+        />
+      </div>
+      <div class="row">
+        <div class="row-header">
+          <label>Tint Opacity</label><span id="v-tint">0.12</span>
+        </div>
+        <input
+          type="range"
+          id="c-tint"
+          min="0"
+          max="0.6"
+          value="0.12"
+          step="0.02"
+        />
+      </div>
+
+      <hr class="sep" />
+
+      <span class="section-badge badge-safari">Safari / iOS</span>
+
+      <div class="row">
+        <div class="row-header">
+          <label>StdDeviation</label><span id="v-sblur">2</span>
+        </div>
+        <input
+          type="range"
+          id="c-sblur"
+          min="0"
+          max="12"
+          value="2"
+          step="0.5"
+        />
+      </div>
+      <div class="row">
+        <div class="row-header">
+          <label>Alpha</label><span id="v-salpha">0.15</span>
+        </div>
+        <input
+          type="range"
+          id="c-salpha"
+          min="0"
+          max="0.6"
+          value="0.15"
+          step="0.05"
+        />
+      </div>
+    </div>
+
+    <!-- Hidden SVG filters -->
+    <svg style="display: none" xmlns="http://www.w3.org/2000/svg">
+      <filter
+        id="f-full"
+        x="0%"
+        y="0%"
+        width="100%"
+        height="100%"
+        filterUnits="objectBoundingBox"
+      >
+        <feTurbulence
+          id="ft-turb"
+          type="fractalNoise"
+          baseFrequency="0.008 0.008"
+          numOctaves="1"
+          seed="1.5"
+          result="turbulence"
+        />
+        <feComponentTransfer in="turbulence" result="mapped">
+          <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
+          <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
+          <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
+        </feComponentTransfer>
+        <feGaussianBlur
+          id="ft-gblur"
+          in="turbulence"
+          stdDeviation="3"
+          result="softMap"
+        />
+        <feSpecularLighting
+          in="softMap"
+          surfaceScale="5"
+          specularConstant="1"
+          specularExponent="100"
+          lightingColor="white"
+          result="specLight"
+        >
+          <fePointLight x="-200" y="-200" z="300" />
+        </feSpecularLighting>
+        <feComposite
+          in="specLight"
+          operator="arithmetic"
+          k1="0"
+          k2="1"
+          k3="1"
+          k4="0"
+          result="litImage"
+        />
+        <feDisplacementMap
+          id="ft-disp"
+          in="SourceGraphic"
+          in2="softMap"
+          scale="150"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+
+      <filter
+        id="f-safari"
+        x="-20%"
+        y="-20%"
+        width="140%"
+        height="140%"
+        filterUnits="objectBoundingBox"
+      >
+        <feTurbulence
+          id="fs-turb"
+          type="fractalNoise"
+          baseFrequency="0.008 0.008"
+          numOctaves="2"
+          seed="1.5"
+          result="turbulence"
+        />
+        <feGaussianBlur
+          id="fs-gblur"
+          in="turbulence"
+          stdDeviation="2"
+          result="blur"
+        />
+        <feColorMatrix
+          id="fs-alpha"
+          in="blur"
+          type="matrix"
+          values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.15 0"
+          result="transparency"
+        />
+        <feBlend in="SourceGraphic" in2="transparency" mode="normal" />
+      </filter>
+    </svg>
+
+    <script>
+      // Populate background text grid
+      const words = [
+        'Liquid',
+        'Glass',
+        'React',
+        'SVG',
+        'Filter',
+        'Blur',
+        'Frost',
+        'Morph',
+        'Wave',
+        'Glow',
+        'Fluid',
+        'Dark',
+      ]
+      const grid = document.getElementById('bg-text-grid')
+      for (let i = 0; i < 60; i++) {
+        const s = document.createElement('span')
+        s.textContent = words[i % words.length]
+        grid.appendChild(s)
+      }
+
+      // Detect browser
+      const ua = navigator.userAgent
+      const isIOS = /iPad|iPhone|iPod/.test(ua)
+      const isSafari = /^((?!chrome|android).)*safari/i.test(ua)
+      document.getElementById('browser-name').textContent =
+        isIOS || isSafari ? 'Safari / iOS' : 'Chrome / Firefox'
+
+      // All backdrop elements
+      const backdrops = {
+        main: document.getElementById('backdrop-main'),
+        chrome: document.getElementById('backdrop-chrome'),
+        safari: document.getElementById('backdrop-safari'),
+      }
+      const tints = {
+        main: document.getElementById('tint-main'),
+        chrome: document.getElementById('tint-chrome'),
+        safari: document.getElementById('tint-safari'),
+      }
+
+      // Apply initial filters
+      backdrops.main.style.filter = 'url(#f-full)'
+      backdrops.chrome.style.filter = 'url(#f-full)'
+      backdrops.safari.style.filter = 'url(#f-safari)'
+
+      const setBackdropBlur = (px) => {
+        const v = `blur(${px}px)`
+        Object.values(backdrops).forEach((el) => {
+          el.style.backdropFilter = v
+          el.style.webkitBackdropFilter = v
+        })
+      }
+      const setTint = (alpha) => {
+        const c = `rgba(255,255,255,${alpha})`
+        Object.values(tints).forEach((el) => (el.style.background = c))
+      }
+
+      setBackdropBlur(2)
+      setTint(0.12)
+
+      const bind = (ctrlId, valId, fn) => {
+        const el = document.getElementById(ctrlId)
+        const vl = document.getElementById(valId)
+        el.addEventListener('input', () => {
+          vl.textContent = el.value
+          fn(el.value)
+        })
+        vl.textContent = el.value
+      }
+
+      bind('c-scale', 'v-scale', (v) => {
+        document.getElementById('ft-disp').setAttribute('scale', v)
+      })
+      bind('c-freqx', 'v-freqx', (v) => {
+        const fy = document.getElementById('c-freqy').value
+        const freq = `${v} ${fy}`
+        document.getElementById('ft-turb').setAttribute('baseFrequency', freq)
+        document.getElementById('fs-turb').setAttribute('baseFrequency', freq)
+      })
+      bind('c-freqy', 'v-freqy', (v) => {
+        const fx = document.getElementById('c-freqx').value
+        const freq = `${fx} ${v}`
+        document.getElementById('ft-turb').setAttribute('baseFrequency', freq)
+        document.getElementById('fs-turb').setAttribute('baseFrequency', freq)
+      })
+      bind('c-seed', 'v-seed', (v) => {
+        document.getElementById('ft-turb').setAttribute('seed', v)
+        document.getElementById('fs-turb').setAttribute('seed', v)
+      })
+      bind('c-gblur', 'v-gblur', (v) => {
+        document.getElementById('ft-gblur').setAttribute('stdDeviation', v)
+      })
+      bind('c-backdrop', 'v-backdrop', (v) => setBackdropBlur(v))
+      bind('c-tint', 'v-tint', (v) => setTint(v))
+      bind('c-sblur', 'v-sblur', (v) => {
+        document.getElementById('fs-gblur').setAttribute('stdDeviation', v)
+      })
+      bind('c-salpha', 'v-salpha', (v) => {
+        document
+          .getElementById('fs-alpha')
+          .setAttribute(
+            'values',
+            `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${v} 0`
+          )
+      })
+    </script>
+  </body>
+</html>

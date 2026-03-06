@@ -13,6 +13,7 @@ export default defineConfig({
         '**/*.spec.*',
         'src/App.tsx',
         'src/main.tsx',
+        'src/test/**',
         '/public/**/*',
       ],
     }),

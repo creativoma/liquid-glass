@@ -23,6 +23,7 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
       <svg style={{ display: 'none' }} suppressHydrationWarning>
         {useSimplifiedFilter ? (
           // Simplified filter for Safari/iOS - uses only well-supported primitives
+          // Note: displacementScale has no effect in this filter path
           <filter
             id={cleanFilterId}
             x="-20%"
@@ -109,8 +110,10 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
       </svg>
 
       <Component
-        className={`relative overflow-hidden ${className}`}
+        className={className}
         style={{
+          position: 'relative',
+          overflow: 'hidden',
           boxShadow:
             '0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)',
           ...style,
@@ -118,14 +121,16 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
         {...rest}
       >
         <div
-          className="absolute inset-0 z-0 overflow-hidden"
           style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 0,
+            overflow: 'hidden',
             backdropFilter: `blur(${backdropBlur}px)`,
             WebkitBackdropFilter: `blur(${backdropBlur}px)`,
             filter: `url(#${cleanFilterId})`,
             isolation: 'isolate',
             ...(useSimplifiedFilter && {
-              // Additional CSS-based effects for Safari/iOS to enhance the liquid glass appearance
               transform: 'translateZ(0)',
               willChange: 'transform',
             }),
@@ -133,13 +138,15 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
         />
 
         <div
-          className="absolute inset-0 z-[1]"
           style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
             background: tintColor,
           }}
         />
 
-        <div className="relative z-[2]">{children}</div>
+        <div style={{ position: 'relative', zIndex: 2 }}>{children}</div>
       </Component>
     </>
   )
