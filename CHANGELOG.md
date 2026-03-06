@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.2] - 2026-03-06
+## [1.1.3] - 2026-03-06
 
 ### Security
 
@@ -15,6 +15,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `minimatch` to `>=9.0.7` and `>=10.2.3` via pnpm overrides to fix vulnerability
 - Updated `rollup` to `>=4.59.0` via pnpm overrides to fix vulnerability
 - Bumped dev dependencies: `tailwindcss` `^4.1` → `^4.2`, `@tailwindcss/postcss` `^4.1` → `^4.2`, `globals`, `postcss`, `eslint-plugin-react-refresh`, `typescript-eslint`, `@types/node`
+
+### Fixed
+
+- Reverted `eslint` to `^9.x` for compatibility with `eslint-plugin-react-hooks@7`
+
+## [1.1.2] - 2026-03-06
+
+### Yanked
+
+- Published with eslint@10 which breaks peer dependency with eslint-plugin-react-hooks
 
 ## [1.1.1] - 2026-02-14
 
