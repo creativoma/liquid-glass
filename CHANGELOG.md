@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `disabled` prop on `LiquidGlass` to fully bypass the SVG filter and backdrop layers, rendering plain children for low-power devices, perf-sensitive lists, or manual opt-out
 - `useBrowserDetection` now also detects the OS-level `prefers-reduced-motion` setting and exposes it as `prefersReducedMotion`; when set, the component automatically falls back to the lighter Safari/iOS filter instead of the full turbulence + displacement pipeline
-- GitHub Actions CI workflow (`.github/workflows/ci.yml`) running lint, tests, and library build on Node 20 and 22, plus a dedicated job that installs React 18 peer dependencies to verify compatibility with the `>=18.0.0` range, and a bundle size report step
+- GitHub Actions CI workflow (`.github/workflows/ci.yml`) running lint, tests, and library build on Node 22 and 24, plus a dedicated job that installs React 18 peer dependencies to verify compatibility with the `>=18.0.0` range, and a bundle size report step
 
 ### Changed
 
