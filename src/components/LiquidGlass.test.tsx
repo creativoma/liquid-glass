@@ -242,6 +242,40 @@ describe('LiquidGlass', () => {
     })
   })
 
+  describe('disabled', () => {
+    it('renders only children with no svg filter or glass layers', () => {
+      const { container } = render(<LiquidGlass disabled>content</LiquidGlass>)
+      expect(container.querySelector('svg')).not.toBeInTheDocument()
+      expect(screen.getByText('content')).toBeInTheDocument()
+    })
+
+    it('renders as the wrapper element directly', () => {
+      const { container } = render(
+        <LiquidGlass disabled data-testid="glass-box">
+          content
+        </LiquidGlass>
+      )
+      expect(container.children).toHaveLength(1)
+      expect(screen.getByTestId('glass-box')).toBeInTheDocument()
+    })
+
+    it('applies className and custom style when disabled', () => {
+      const { container } = render(
+        <LiquidGlass
+          disabled
+          className="custom-class"
+          style={{ borderRadius: '16px' }}
+        >
+          content
+        </LiquidGlass>
+      )
+      const wrapper = container.children[0] as HTMLElement
+      expect(wrapper).toHaveClass('custom-class')
+      expect(wrapper.style.borderRadius).toBe('16px')
+      expect(wrapper.style.boxShadow).toBe('')
+    })
+  })
+
   describe('layer structure', () => {
     it('backdrop layer has isolation isolate', () => {
       const { container } = render(<LiquidGlass>content</LiquidGlass>)

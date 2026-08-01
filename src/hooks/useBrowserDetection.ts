@@ -21,13 +21,27 @@ const hasLimitedFilterSupport = (): boolean => {
 }
 
 /**
+ * Detects whether the user has requested reduced motion at the OS level.
+ * The full filter (turbulence + specular lighting + displacement) is the
+ * most GPU-intensive path, so reduced-motion users get the cheaper filter too.
+ */
+const prefersReducedMotion = (): boolean => {
+  if (typeof window === 'undefined' || !window.matchMedia) return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+/**
  * Custom hook for detecting browser capabilities
  * Returns whether a simplified filter should be used for Safari/iOS
+ * or when the user has requested reduced motion
  */
 export const useBrowserDetection = () => {
   // Detect filter support immediately during render to avoid hydration mismatch
   // This runs once on client-side, returns false on server-side
-  const [useSimplifiedFilter] = useState(() => hasLimitedFilterSupport())
+  const [isReducedMotion] = useState(prefersReducedMotion)
+  const [useSimplifiedFilter] = useState(
+    () => hasLimitedFilterSupport() || isReducedMotion
+  )
 
-  return { useSimplifiedFilter }
+  return { useSimplifiedFilter, prefersReducedMotion: isReducedMotion }
 }

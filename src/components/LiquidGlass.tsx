@@ -1,4 +1,4 @@
-import { FC, useId } from 'react'
+import { FC, useId, useMemo } from 'react'
 import type { LiquidGlassProps } from './types'
 import { useBrowserDetection } from '../hooks/useBrowserDetection'
 
@@ -12,11 +12,32 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
   turbulenceSeed = 1.5,
   as: Component = 'div',
   style,
+  disabled = false,
   ...rest
 }) => {
   const filterId = useId()
   const cleanFilterId = `liquid-glass-${filterId.replace(/:/g, '-')}`
   const { useSimplifiedFilter } = useBrowserDetection()
+
+  const wrapperStyle = useMemo(
+    () => ({
+      position: 'relative' as const,
+      overflow: 'hidden' as const,
+      boxShadow: disabled
+        ? undefined
+        : '0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)',
+      ...style,
+    }),
+    [disabled, style]
+  )
+
+  if (disabled) {
+    return (
+      <Component className={className} style={wrapperStyle} {...rest}>
+        {children}
+      </Component>
+    )
+  }
 
   return (
     <>
@@ -109,17 +130,7 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
         )}
       </svg>
 
-      <Component
-        className={className}
-        style={{
-          position: 'relative',
-          overflow: 'hidden',
-          boxShadow:
-            '0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)',
-          ...style,
-        }}
-        {...rest}
-      >
+      <Component className={className} style={wrapperStyle} {...rest}>
         <div
           style={{
             position: 'absolute',

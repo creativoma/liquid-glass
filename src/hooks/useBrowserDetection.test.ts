@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react'
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, afterEach, beforeEach } from 'vitest'
 import { useBrowserDetection } from './useBrowserDetection'
 
 const setUserAgent = (ua: string) => {
@@ -9,11 +9,30 @@ const setUserAgent = (ua: string) => {
   })
 }
 
+const setPrefersReducedMotion = (matches: boolean) => {
+  window.matchMedia = ((query: string) => ({
+    matches: query === '(prefers-reduced-motion: reduce)' ? matches : false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+  })) as typeof window.matchMedia
+}
+
 describe('useBrowserDetection', () => {
   const originalUserAgent = window.navigator.userAgent
+  const originalMatchMedia = window.matchMedia
+
+  beforeEach(() => {
+    setPrefersReducedMotion(false)
+  })
 
   afterEach(() => {
     setUserAgent(originalUserAgent)
+    window.matchMedia = originalMatchMedia
   })
 
   describe('useSimplifiedFilter', () => {
@@ -81,6 +100,28 @@ describe('useBrowserDetection', () => {
       const first = result.current.useSimplifiedFilter
       rerender()
       expect(result.current.useSimplifiedFilter).toBe(first)
+    })
+
+    it('returns true for Chrome when prefers-reduced-motion is set', () => {
+      setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36'
+      )
+      setPrefersReducedMotion(true)
+      const { result } = renderHook(() => useBrowserDetection())
+      expect(result.current.useSimplifiedFilter).toBe(true)
+    })
+  })
+
+  describe('prefersReducedMotion', () => {
+    it('returns false when the OS has no reduced motion preference', () => {
+      const { result } = renderHook(() => useBrowserDetection())
+      expect(result.current.prefersReducedMotion).toBe(false)
+    })
+
+    it('returns true when the OS prefers reduced motion', () => {
+      setPrefersReducedMotion(true)
+      const { result } = renderHook(() => useBrowserDetection())
+      expect(result.current.prefersReducedMotion).toBe(true)
     })
   })
 })

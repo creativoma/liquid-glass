@@ -30,4 +30,7 @@ export interface LiquidGlassProps extends Omit<
 
   /** Additional inline styles */
   style?: CSSProperties
+
+  /** Disables the glass effect entirely, rendering plain children (useful for low-power devices or perf-sensitive lists) */
+  disabled?: boolean
 }

@@ -1,6 +1,7 @@
 # @creativoma/liquid-glass
 
 [![npm version](https://img.shields.io/npm/v/@creativoma/liquid-glass.svg)](https://www.npmjs.com/package/@creativoma/liquid-glass)
+[![CI](https://github.com/creativoma/liquid-glass/actions/workflows/ci.yml/badge.svg)](https://github.com/creativoma/liquid-glass/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://reactjs.org/)
@@ -14,6 +15,8 @@ A modern React component library featuring liquid frosted glass effect using Tai
 - TailwindCSS integration for seamless styling
 - Polymorphic component API (render as any HTML element)
 - Cross-browser compatible with Safari/iOS fallback support
+- Respects `prefers-reduced-motion` by automatically using the lighter filter
+- `disabled` prop to fully bypass the effect for low-power devices or long lists
 - Customizable blur, tint, and turbulence parameters
 - Zero dependencies (peer dependencies only)
 - ESM and UMD formats for maximum compatibility
@@ -53,17 +56,28 @@ function App() {
 
 ### Props
 
-| Prop                      | Type              | Default                     | Description                                           |
-| ------------------------- | ----------------- | --------------------------- | ----------------------------------------------------- |
-| `children`                | `React.ReactNode` | -                           | Content to display inside the container               |
-| `className`               | `string`          | `''`                        | Additional TailwindCSS CSS classes                    |
-| `backdropBlur`            | `number`          | `2`                         | Blur level for the backdrop filter (in px)            |
-| `tintColor`               | `string`          | `'rgba(255, 255, 255, .2)'` | Tint overlay color (rgba)                             |
-| `displacementScale`       | `number`          | `150`                       | Displacement map scale (liquid effect intensity)      |
-| `turbulenceBaseFrequency` | `string`          | `'0.008 0.008'`             | Turbulence base frequency (controls noise size)       |
-| `turbulenceSeed`          | `number`          | `1.5`                       | Turbulence seed (for different noise patterns)        |
-| `as`                      | `ElementType`     | `'div'`                     | HTML component to render (div, button, section, etc.) |
-| `style`                   | `CSSProperties`   | -                           | Additional inline styles                              |
+| Prop                      | Type              | Default                     | Description                                               |
+| ------------------------- | ----------------- | --------------------------- | --------------------------------------------------------- |
+| `children`                | `React.ReactNode` | -                           | Content to display inside the container                   |
+| `className`               | `string`          | `''`                        | Additional TailwindCSS CSS classes                        |
+| `backdropBlur`            | `number`          | `2`                         | Blur level for the backdrop filter (in px)                |
+| `tintColor`               | `string`          | `'rgba(255, 255, 255, .2)'` | Tint overlay color (rgba)                                 |
+| `displacementScale`       | `number`          | `150`                       | Displacement map scale (liquid effect intensity)          |
+| `turbulenceBaseFrequency` | `string`          | `'0.008 0.008'`             | Turbulence base frequency (controls noise size)           |
+| `turbulenceSeed`          | `number`          | `1.5`                       | Turbulence seed (for different noise patterns)            |
+| `as`                      | `ElementType`     | `'div'`                     | HTML component to render (div, button, section, etc.)     |
+| `style`                   | `CSSProperties`   | -                           | Additional inline styles                                  |
+| `disabled`                | `boolean`         | `false`                     | Fully bypasses the glass effect, rendering plain children |
+
+## Accessibility
+
+`LiquidGlass` automatically detects the OS-level `prefers-reduced-motion` setting (via `useBrowserDetection`) and falls back to the lighter Safari/iOS filter when it's set, since the full turbulence + displacement pipeline is the most GPU-intensive path. If you need to opt out entirely — for a reduced-motion mode, a low-power device, or a long list of glass cards — pass `disabled` to render plain children with no filter or backdrop blur:
+
+```jsx
+<LiquidGlass disabled={isLowPowerMode}>
+  <div className="p-8">Falls back to plain content</div>
+</LiquidGlass>
+```
 
 ## Usage Examples
 
@@ -208,6 +222,8 @@ liquid-glass/
 - React >= 18.0.0
 - React DOM >= 18.0.0
 - TailwindCSS (component uses Tailwind classes)
+
+CI verifies compatibility with both React 18 and React 19 on every push (see [`.github/workflows/ci.yml`](./.github/workflows/ci.yml)).
 
 ## Technologies
 

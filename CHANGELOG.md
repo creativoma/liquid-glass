@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-08-01
+
+### Added
+
+- `disabled` prop on `LiquidGlass` to fully bypass the SVG filter and backdrop layers, rendering plain children for low-power devices, perf-sensitive lists, or manual opt-out
+- `useBrowserDetection` now also detects the OS-level `prefers-reduced-motion` setting and exposes it as `prefersReducedMotion`; when set, the component automatically falls back to the lighter Safari/iOS filter instead of the full turbulence + displacement pipeline
+- GitHub Actions CI workflow (`.github/workflows/ci.yml`) running lint, tests, and library build on Node 20 and 22, plus a dedicated job that installs React 18 peer dependencies to verify compatibility with the `>=18.0.0` range, and a bundle size report step
+
+### Changed
+
+- Memoized the wrapper's inline style object with `useMemo` to avoid recreating it on every render
+- Bumped dev dependencies to latest versions: `@eslint/js`, `@tailwindcss/postcss`, `@testing-library/jest-dom`, `@types/node`, `@types/react`, `@types/react-dom`, `@vitejs/plugin-react`, `@vitest/coverage-v8`, `autoprefixer`, `eslint`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, `globals`, `postcss`, `prettier`, `prettier-plugin-tailwindcss`, `react`, `react-dom`, `tailwindcss`, `typescript-eslint`, `vite`, `vitest`
+
 ## [1.2.0] - 2026-03-07
 
 ### Added
