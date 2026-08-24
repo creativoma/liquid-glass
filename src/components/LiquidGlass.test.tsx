@@ -301,6 +301,18 @@ describe('LiquidGlass', () => {
       expect(content.style.zIndex).toBe('2')
     })
 
+    it('backdrop layer inherits the border radius', () => {
+      const { container } = render(<LiquidGlass>content</LiquidGlass>)
+      const { backdrop } = getLayers(container)
+      expect(backdrop.style.borderRadius).toBe('inherit')
+    })
+
+    it('tint layer inherits the border radius', () => {
+      const { container } = render(<LiquidGlass>content</LiquidGlass>)
+      const { tint } = getLayers(container)
+      expect(tint.style.borderRadius).toBe('inherit')
+    })
+
     it('all inner layers are positioned absolute except content', () => {
       const { container } = render(<LiquidGlass>content</LiquidGlass>)
       const { backdrop, tint, content } = getLayers(container)

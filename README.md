@@ -69,6 +69,17 @@ function App() {
 | `style`                   | `CSSProperties`   | -                           | Additional inline styles                                  |
 | `disabled`                | `boolean`         | `false`                     | Fully bypasses the glass effect, rendering plain children |
 
+## Styling
+
+Rounded corners go on `className` (or `style`) of the component itself — the internal backdrop and
+tint layers use `border-radius: inherit`, so they follow whatever radius you set:
+
+```jsx
+<LiquidGlass backdropBlur={8} className="rounded-3xl p-6">
+  <p className="text-white">The blur is clipped to the same radius</p>
+</LiquidGlass>
+```
+
 ## Accessibility
 
 `LiquidGlass` automatically detects the OS-level `prefers-reduced-motion` setting (via `useBrowserDetection`) and falls back to the lighter Safari/iOS filter when it's set, since the full turbulence + displacement pipeline is the most GPU-intensive path. If you need to opt out entirely — for a reduced-motion mode, a low-power device, or a long list of glass cards — pass `disabled` to render plain children with no filter or backdrop blur:

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-08-24
+
+### Fixed
+
+- Rounded corners now clip the blur layer: the internal backdrop and tint layers use `border-radius: inherit`, so a radius set on the component (`rounded-xl`, `rounded-full`, `style.borderRadius`) is followed by every layer. Previously the `backdrop-filter` layer kept square corners — `backdrop-filter` clips against its own border box and browsers don't apply an ancestor's rounded `overflow: hidden` to it — so the blur leaked past the radius as a hard right angle over high-contrast backdrops
+
+### Documentation
+
+- README: new "Styling" section noting that the radius goes on `className`/`style` and the internal layers follow it
+
 ## [1.3.0] - 2026-08-01
 
 ### Added

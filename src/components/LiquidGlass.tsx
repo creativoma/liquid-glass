@@ -137,6 +137,7 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
             inset: 0,
             zIndex: 0,
             overflow: 'hidden',
+            borderRadius: 'inherit',
             backdropFilter: `blur(${backdropBlur}px)`,
             WebkitBackdropFilter: `blur(${backdropBlur}px)`,
             filter: `url(#${cleanFilterId})`,
@@ -153,6 +154,7 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
             position: 'absolute',
             inset: 0,
             zIndex: 1,
+            borderRadius: 'inherit',
             background: tintColor,
           }}
         />
