@@ -27,7 +27,6 @@ const BackgroundLayers = () => (
       className="blob fixed bottom-[10%] left-[50%] -z-15 h-87.5 w-87.5 bg-(--color-indigo-deep)"
       style={{ animationDelay: '10s' }}
     />
-    <div className="noise-overlay fixed inset-0 -z-10" />
   </>
 )
 
@@ -331,7 +330,7 @@ const App = () => {
             backdropBlur={2}
           >
             <p className="text-sm font-medium text-white/80 sm:text-base">
-              Crafted with liquid energy by{' '}
+              Built by{' '}
               <span className="text-gradient-electric font-bold">
                 @creativoma
               </span>
@@ -358,13 +357,54 @@ const App = () => {
             </a>
             <span>•</span>
             <a
-              href="https://creativoma.com"
+              href="https://marianoalvarez.dev"
               target="_blank"
               rel="noopener noreferrer"
               className="transition-colors hover:text-(--color-electric-purple)"
             >
-              creativoma.com
+              marianoalvarez.dev
             </a>
+          </div>
+
+          <div className="mt-10 sm:mt-14">
+            <div className="mx-auto h-px w-full max-w-56 bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+
+            <p className="mx-auto mt-8 max-w-sm text-sm leading-relaxed text-balance text-white/50">
+              I maintain this lab in my own time. If it saved you an afternoon,
+              you can sponsor the maintenance.
+            </p>
+
+            <a
+              href="https://github.com/sponsors/creativoma"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/70 transition-all hover:border-(--color-electric-purple)/40 hover:bg-white/10 hover:text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-(--color-electric-purple)"
+                aria-hidden="true"
+              >
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+              Sponsor
+            </a>
+
+            <p className="mt-8 text-xs text-white/30">
+              MIT ©{' '}
+              <a
+                href="https://marianoalvarez.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-(--color-electric-purple)"
+              >
+                Mariano Álvarez
+              </a>
+            </p>
           </div>
         </footer>
       </div>
