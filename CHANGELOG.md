@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-08-25
+
+### Added
+
+- `build` script as an alias for `build:lib`, so the conventional `pnpm build` works
+
+### Changed
+
+- Vite `^7.3` → `^8.2` switches the library build from rollup to rolldown. The public API, runtime behaviour and type declarations are unchanged (`dist/*.d.ts` is byte-identical to 1.3.1), but the emitted bundle has a different internal structure and is ~15% smaller (esm 14.6 kB → 12.5 kB). Released as a minor rather than a patch to signal the changed build artifact
+- Bumped dev dependencies to latest versions: `@eslint/js` `^9.39` → `^10.0`, `eslint` `^9.39` → `^10.9`, `@vitejs/plugin-react` `^5.2` → `^6.1`, `vite` `^7.3` → `^8.2`, `vite-plugin-dts` `^4.5` → `^5.0`, `jsdom` `^28.1` → `^30.0`, `@testing-library/jest-dom` `^6.10` → `^7.0`, `prettier-plugin-tailwindcss` `^0.7` → `^0.8`, plus `@types/node`, `@types/react-dom`, `@vitest/coverage-v8`, `eslint-plugin-react-refresh`, `globals`, `postcss`, `typescript-eslint`, `vitest`
+- `typescript` `^5.9` → `^6.0`. TypeScript 7 was held back deliberately: it removes the JavaScript Compiler API, which breaks both `vite-plugin-dts` (no `.d.ts` generation) and `typescript-eslint` (throws on any TS >= 7, peer range `<6.1.0`). Revisit once [typescript-eslint#10940](https://github.com/typescript-eslint/typescript-eslint/issues/10940) lands TS 7 support
+
+### Fixed
+
+- `vite.config.lib.ts` now uses `import.meta.dirname` instead of `__dirname`, clearing a Vite 8 deprecation warning from the native config loader
+
 ## [1.3.1] - 2026-08-24
 
 ### Fixed

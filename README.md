@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@creativoma/liquid-glass.svg)](https://www.npmjs.com/package/@creativoma/liquid-glass)
 [![CI](https://github.com/creativoma/liquid-glass/actions/workflows/ci.yml/badge.svg)](https://github.com/creativoma/liquid-glass/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://reactjs.org/)
 
 A modern React component library featuring liquid frosted glass effect using TailwindCSS and SVG filters. Create elegant glassmorphism interfaces with advanced visual effects.
@@ -264,7 +264,7 @@ Contributions are welcome! Please:
 
 ## License
 
-MIT © [creativoma](https://github.com/creativoma)
+MIT © [Mariano Álvarez](https://github.com/creativoma)
 
 ## Changelog
 

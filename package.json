@@ -1,6 +1,6 @@
 {
   "name": "@creativoma/liquid-glass",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "type": "module",
   "packageManager": "pnpm@11.1.1",
   "description": "A React wrapper component with liquid frosted glass effect using TailwindCSS",
@@ -29,6 +29,7 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
+    "build": "npm run build:lib",
     "build:demo": "vite build --config vite.config.ts",
     "build:lib": "tsc && vite build --config vite.config.lib.ts",
     "lint": "eslint . --ext .ts,.tsx",
@@ -53,7 +54,7 @@
     "frontend"
   ],
   "author": {
-    "name": "creativoma"
+    "name": "Mariano Álvarez"
   },
   "license": "MIT",
   "peerDependencies": {
@@ -61,32 +62,32 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.5",
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.3.3",
-    "@testing-library/jest-dom": "^6.10.0",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
-    "@types/node": "^25.9.5",
+    "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "@vitejs/plugin-react": "^5.2.0",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^6.1.0",
+    "@vitest/coverage-v8": "^4.1.11",
     "autoprefixer": "^10.5.4",
-    "eslint": "^9.39.5",
+    "eslint": "^10.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.3",
-    "globals": "^17.8.0",
-    "jsdom": "^28.1.0",
-    "postcss": "^8.5.25",
+    "eslint-plugin-react-refresh": "^0.5.4",
+    "globals": "^17.11.0",
+    "jsdom": "^30.0.1",
+    "postcss": "^8.5.26",
     "prettier": "^3.9.6",
-    "prettier-plugin-tailwindcss": "^0.7.4",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.65.0",
-    "vite": "^7.3.6",
-    "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.1.10"
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.67.0",
+    "vite": "^8.2.2",
+    "vite-plugin-dts": "^5.0.3",
+    "vitest": "^4.1.11"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
