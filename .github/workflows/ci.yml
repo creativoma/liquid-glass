@@ -29,8 +29,11 @@ jobs:
       - run: pnpm run test:run
       - run: pnpm run build:lib
 
+      - name: Validate packaging (publint)
+        run: pnpm run lint:pkg
+
       - name: Report bundle size
-        run: du -h dist/index.esm.js dist/index.umd.js
+        run: du -h dist/index.js dist/index.cjs
 
   react-18-compat:
     name: React 18 peer dependency compatibility

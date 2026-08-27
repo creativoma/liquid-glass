@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useSyncExternalStore } from 'react'
 
 // RegExp patterns hoisted to module level for performance
 const IOS_REGEX = /iPad|iPhone|iPod/
 const SAFARI_REGEX = /^((?!chrome|android).)*safari/i
+
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'
 
 /**
  * Detects if the browser has limited SVG filter support (Safari/iOS)
@@ -27,8 +29,22 @@ const hasLimitedFilterSupport = (): boolean => {
  */
 const prefersReducedMotion = (): boolean => {
   if (typeof window === 'undefined' || !window.matchMedia) return false
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches
 }
+
+// The user agent never changes during a session — nothing to subscribe to
+const subscribeToNothing = () => () => {}
+
+const subscribeToReducedMotion = (onChange: () => void) => {
+  if (typeof window === 'undefined' || !window.matchMedia) return () => {}
+  const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY)
+  mediaQuery.addEventListener('change', onChange)
+  return () => mediaQuery.removeEventListener('change', onChange)
+}
+
+// Server snapshots are false so SSR and hydration always render the full
+// filter markup; the client value takes over right after hydration
+const serverSnapshot = () => false
 
 /**
  * Custom hook for detecting browser capabilities
@@ -36,12 +52,19 @@ const prefersReducedMotion = (): boolean => {
  * or when the user has requested reduced motion
  */
 export const useBrowserDetection = () => {
-  // Detect filter support immediately during render to avoid hydration mismatch
-  // This runs once on client-side, returns false on server-side
-  const [isReducedMotion] = useState(prefersReducedMotion)
-  const [useSimplifiedFilter] = useState(
-    () => hasLimitedFilterSupport() || isReducedMotion
+  const isReducedMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    prefersReducedMotion,
+    serverSnapshot
+  )
+  const limitedFilterSupport = useSyncExternalStore(
+    subscribeToNothing,
+    hasLimitedFilterSupport,
+    serverSnapshot
   )
 
-  return { useSimplifiedFilter, prefersReducedMotion: isReducedMotion }
+  return {
+    useSimplifiedFilter: limitedFilterSupport || isReducedMotion,
+    prefersReducedMotion: isReducedMotion,
+  }
 }

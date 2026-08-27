@@ -8,11 +8,13 @@ export default defineConfig({
     react(),
     dts({
       insertTypesEntry: true,
+      rollupTypes: true,
+      compilerOptions: { declarationMap: false },
       exclude: [
         '**/*.test.*',
         '**/*.spec.*',
-        'src/App.tsx',
         'src/main.tsx',
+        'src/demo/**',
         'src/test/**',
         '/public/**/*',
       ],
@@ -22,16 +24,17 @@ export default defineConfig({
     lib: {
       entry: resolve(import.meta.dirname, 'src/index.ts'),
       name: 'LiquidGlass',
-      formats: ['es', 'umd'],
-      fileName: (format) => `index.${format === 'es' ? 'esm' : format}.js`,
+      formats: ['es', 'cjs'],
+      fileName: (format) => (format === 'es' ? 'index.js' : 'index.cjs'),
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      // react/jsx-runtime must stay external: bundling it (a CJS module)
+      // injects a require() interop shim that throws in native ESM (Node SSR)
+      external: ['react', 'react-dom', 'react/jsx-runtime'],
       output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-        },
+        // Next.js App Router: the component uses hooks, so consumers must
+        // get it as a Client Component without wrapping it themselves
+        banner: '"use client";',
       },
     },
     target: 'es2020',
