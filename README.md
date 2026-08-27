@@ -1,6 +1,7 @@
 # @creativoma/liquid-glass
 
 [![npm version](https://img.shields.io/npm/v/@creativoma/liquid-glass.svg)](https://www.npmjs.com/package/@creativoma/liquid-glass)
+[![npm downloads](https://img.shields.io/npm/dw/@creativoma/liquid-glass.svg)](https://www.npmjs.com/package/@creativoma/liquid-glass)
 [![CI](https://github.com/creativoma/liquid-glass/actions/workflows/ci.yml/badge.svg)](https://github.com/creativoma/liquid-glass/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue.svg)](https://www.typescriptlang.org/)
@@ -8,9 +9,12 @@
 
 A modern React component library featuring liquid frosted glass effect using TailwindCSS and SVG filters. Create elegant glassmorphism interfaces with advanced visual effects.
 
+**[Live demo →](https://liquid-glass-tan.vercel.app)**
+
 ## Features
 
 - Liquid frosted glass effect with customizable displacement mapping
+- SSR-ready: works out of the box in Next.js (App Router and pages router), Remix, and any server-rendered app
 - Full TypeScript support with comprehensive type definitions
 - TailwindCSS integration for seamless styling
 - Polymorphic component API (render as any HTML element)
@@ -19,7 +23,7 @@ A modern React component library featuring liquid frosted glass effect using Tai
 - `disabled` prop to fully bypass the effect for low-power devices or long lists
 - Customizable blur, tint, and turbulence parameters
 - Zero dependencies (peer dependencies only)
-- ESM and UMD formats for maximum compatibility
+- ESM and CJS formats for maximum compatibility
 
 ## Installation
 
@@ -56,18 +60,40 @@ function App() {
 
 ### Props
 
-| Prop                      | Type              | Default                     | Description                                               |
-| ------------------------- | ----------------- | --------------------------- | --------------------------------------------------------- |
-| `children`                | `React.ReactNode` | -                           | Content to display inside the container                   |
-| `className`               | `string`          | `''`                        | Additional TailwindCSS CSS classes                        |
-| `backdropBlur`            | `number`          | `2`                         | Blur level for the backdrop filter (in px)                |
-| `tintColor`               | `string`          | `'rgba(255, 255, 255, .2)'` | Tint overlay color (rgba)                                 |
-| `displacementScale`       | `number`          | `150`                       | Displacement map scale (liquid effect intensity)          |
-| `turbulenceBaseFrequency` | `string`          | `'0.008 0.008'`             | Turbulence base frequency (controls noise size)           |
-| `turbulenceSeed`          | `number`          | `1.5`                       | Turbulence seed (for different noise patterns)            |
-| `as`                      | `ElementType`     | `'div'`                     | HTML component to render (div, button, section, etc.)     |
-| `style`                   | `CSSProperties`   | -                           | Additional inline styles                                  |
-| `disabled`                | `boolean`         | `false`                     | Fully bypasses the glass effect, rendering plain children |
+| Prop                      | Type              | Default                     | Description                                                 |
+| ------------------------- | ----------------- | --------------------------- | ----------------------------------------------------------- |
+| `children`                | `React.ReactNode` | -                           | Content to display inside the container                     |
+| `className`               | `string`          | `''`                        | Additional TailwindCSS CSS classes                          |
+| `contentClassName`        | `string`          | -                           | Classes for the internal content wrapper (layout goes here) |
+| `backdropBlur`            | `number`          | `2`                         | Blur level for the backdrop filter (in px)                  |
+| `tintColor`               | `string`          | `'rgba(255, 255, 255, .2)'` | Tint overlay color (rgba)                                   |
+| `displacementScale`       | `number`          | `150`                       | Displacement map scale (liquid effect intensity)            |
+| `turbulenceBaseFrequency` | `string`          | `'0.008 0.008'`             | Turbulence base frequency (controls noise size)             |
+| `turbulenceSeed`          | `number`          | `1.5`                       | Turbulence seed (for different noise patterns)              |
+| `as`                      | `ElementType`     | `'div'`                     | HTML component to render (div, button, section, etc.)       |
+| `style`                   | `CSSProperties`   | -                           | Additional inline styles                                    |
+| `disabled`                | `boolean`         | `false`                     | Fully bypasses the glass effect, rendering plain children   |
+
+## SSR / Next.js
+
+The component is SSR-safe and ships with the `"use client"` directive baked into every bundle, so it works in Next.js without any wrapper:
+
+```jsx
+// app/page.tsx — App Router, works directly in a Server Component tree
+import { LiquidGlass } from '@creativoma/liquid-glass'
+
+export default function Page() {
+  return (
+    <LiquidGlass backdropBlur={4} className="rounded-2xl p-8">
+      <h1>Server-rendered glass</h1>
+    </LiquidGlass>
+  )
+}
+```
+
+- No `window`, `document`, or layout effects during render — `renderToString` works in plain Node (covered by a regression test).
+- Browser capability detection (Safari/iOS fallback, `prefers-reduced-motion`) runs after mount, so server and client markup always match and there are no hydration warnings.
+- Both `import` (ESM) and `require` (CJS) entry points are published, so it also works with the pages router and older toolchains.
 
 ## Styling
 
@@ -77,6 +103,21 @@ tint layers use `border-radius: inherit`, so they follow whatever radius you set
 ```jsx
 <LiquidGlass backdropBlur={8} className="rounded-3xl p-6">
   <p className="text-white">The blur is clipped to the same radius</p>
+</LiquidGlass>
+```
+
+Layout classes (flex/grid) go on `contentClassName` instead: children render inside an
+internal wrapper (it keeps them above the blur and tint layers), so `display: flex` on
+`className` would lay out that wrapper, not your content:
+
+```jsx
+<LiquidGlass
+  as="nav"
+  className="rounded-full px-6 py-3"
+  contentClassName="flex items-center gap-6"
+>
+  <span>Logo</span>
+  <a href="#docs">Docs</a>
 </LiquidGlass>
 ```
 
@@ -214,11 +255,14 @@ liquid-glass/
 │   ├── components/
 │   │   ├── LiquidGlass.tsx
 │   │   └── types.ts
-│   ├── App.tsx                 # Demo application
+│   ├── hooks/
+│   │   └── useBrowserDetection.ts
+│   ├── demo/                  # Demo/landing application
 │   ├── main.tsx               # Demo entry point
 │   ├── index.ts               # Library entry point
 │   └── index.css
-├── dist/                      # Compiled files
+├── dist/                      # Compiled library
+├── dist-demo/                 # Compiled demo site
 ├── public/                    # Demo assets
 ├── README.md
 ├── package.json
@@ -248,9 +292,11 @@ CI verifies compatibility with both React 18 and React 19 on every push (see [`.
 
 This package includes multiple formats for maximum compatibility:
 
-- **ESM** (`dist/index.esm.js`) - For modern applications
-- **UMD** (`dist/index.umd.js`) - For universal compatibility
-- **TypeScript** (`dist/index.d.ts`) - Type definitions
+- **ESM** (`dist/index.js`) - For modern applications
+- **CJS** (`dist/index.cjs`) - For `require()` consumers (Next.js pages router, Jest, plain Node)
+- **TypeScript** (`dist/index.d.ts` / `dist/index.d.cts`) - Type definitions for both entry points
+
+All bundles are prefixed with the `"use client"` directive for React Server Components compatibility.
 
 ## Contributing
 

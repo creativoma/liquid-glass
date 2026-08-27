@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-08-27
+
+### Fixed
+
+- **SSR crash in CJS consumers (Next.js pages router, Jest, plain Node)**: `main` and `exports['.'].require` pointed to `dist/index.js`, a file the build never emitted (only `index.esm.js` and `index.umd.js` existed), so any `require('@creativoma/liquid-glass')` failed with `MODULE_NOT_FOUND` and took the server render down with it. The build now emits a real CJS bundle (`dist/index.cjs`) and the ESM bundle moved to `dist/index.js`; `main`, `module` and the `exports` map point at files that exist
+- **React Server Components crash (Next.js App Router)**: all bundles are now prefixed with the `"use client"` directive, so importing the component from a server component tree works without a client wrapper
+- **Hydration mismatch on Safari/iOS under SSR**: browser capability detection in `useBrowserDetection` moved from the `useState` initializer to a post-mount `useEffect`. Server and first client render now always emit the full filter markup (matching trees), and Safari/iOS swaps to the simplified filter right after mount
+- **`require()` shim crash in native ESM (Node SSR)**: `react/jsx-runtime` (a CJS module) was being bundled into the output, injecting a rolldown `require()` interop shim that throws in environments without `require` — plain Node ESM and script-tag browsers alike. It is now declared external along with `react` and `react-dom`
+
+### Removed
+
+- The UMD bundle (`dist/index.umd.js`). It was non-functional in its intended use case: the bundled CJS `react/jsx-runtime` tried to `require('react')` at runtime, which cannot resolve in a script-tag browser environment, so no working consumer could exist. ESM and CJS bundles cover all real usage
+
+### Added
+
+- `contentClassName` prop for styling the internal content wrapper that directly contains `children`. Layout classes (`flex`, `grid`, alignment) belong there — on `className` they land on the outer wrapper and never reach the content, since children render inside an internal `z-index: 2` div that keeps them above the blur and tint layers
+- SSR regression test (`src/components/LiquidGlass.ssr.test.tsx`) rendering with `renderToString` in a plain Node environment
+- `publint` packaging validation (`pnpm lint:pkg`), also run in CI after the library build — it would have caught the broken `require` entry before publish
+- `exports` now declares split `import`/`require` conditions with dedicated type declarations for each (`index.d.ts` / `index.d.cts`)
+
+### Changed
+
+- Demo site build output moved from `dist/` to `dist-demo/` so the library and demo builds no longer clobber each other (Vercel `outputDirectory` updated accordingly)
+- Redesigned demo/landing site: sticky glass navbar, new hero, feature bento grid, live examples gallery with view-source toggles, full-props playground with presets, complete props reference, install tabs, and SEO/Open Graph meta tags
+- README: new SSR / Next.js section, live demo link, npm downloads badge, updated package formats
+
 ## [1.4.0] - 2026-08-25
 
 ### Added
