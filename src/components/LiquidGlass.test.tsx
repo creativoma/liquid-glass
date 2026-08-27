@@ -27,6 +27,34 @@ const getLayers = (container: HTMLElement) => {
 }
 
 describe('LiquidGlass', () => {
+  describe('contentClassName', () => {
+    it('applies contentClassName to the content layer', () => {
+      const { container } = render(
+        <LiquidGlass contentClassName="flex items-center">content</LiquidGlass>
+      )
+      const { content } = getLayers(container)
+      expect(content).toHaveClass('flex', 'items-center')
+    })
+
+    it('keeps the content layer above the blur and tint layers', () => {
+      const { container } = render(
+        <LiquidGlass contentClassName="flex">content</LiquidGlass>
+      )
+      const { content } = getLayers(container)
+      expect(content.style.zIndex).toBe('2')
+    })
+
+    it('wraps children with contentClassName when disabled', () => {
+      const { container } = render(
+        <LiquidGlass disabled contentClassName="flex gap-2">
+          content
+        </LiquidGlass>
+      )
+      const wrapper = container.children[0] as HTMLElement
+      expect(wrapper.children[0]).toHaveClass('flex', 'gap-2')
+    })
+  })
+
   describe('rendering', () => {
     it('renders children', () => {
       render(<LiquidGlass>Hello world</LiquidGlass>)

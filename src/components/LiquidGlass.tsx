@@ -5,6 +5,7 @@ import { useBrowserDetection } from '../hooks/useBrowserDetection'
 const LiquidGlass: FC<LiquidGlassProps> = ({
   children,
   className = '',
+  contentClassName,
   backdropBlur = 2,
   tintColor = 'rgba(255, 255, 255, .2)',
   displacementScale = 150,
@@ -34,7 +35,11 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
   if (disabled) {
     return (
       <Component className={className} style={wrapperStyle} {...rest}>
-        {children}
+        {contentClassName ? (
+          <div className={contentClassName}>{children}</div>
+        ) : (
+          children
+        )}
       </Component>
     )
   }
@@ -159,7 +164,12 @@ const LiquidGlass: FC<LiquidGlassProps> = ({
           }}
         />
 
-        <div style={{ position: 'relative', zIndex: 2 }}>{children}</div>
+        <div
+          className={contentClassName}
+          style={{ position: 'relative', zIndex: 2 }}
+        >
+          {children}
+        </div>
       </Component>
     </>
   )

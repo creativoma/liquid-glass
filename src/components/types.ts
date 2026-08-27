@@ -10,6 +10,13 @@ export interface LiquidGlassProps extends Omit<
   /** Additional TailwindCSS classes */
   className?: string
 
+  /**
+   * Classes for the internal content wrapper that directly contains
+   * `children`. Use it for layout (flex/grid) — layout classes on
+   * `className` target the outer wrapper, not the content
+   */
+  contentClassName?: string
+
   /** Blur level for the backdrop filter (in px) */
   backdropBlur?: number
 
