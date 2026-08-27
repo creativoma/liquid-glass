@@ -11,7 +11,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
       include: ['src/components/**', 'src/hooks/**'],
-      exclude: ['src/App.tsx', 'src/main.tsx', '**/*.test.*'],
+      exclude: ['src/demo/**', 'src/main.tsx', '**/*.test.*'],
     },
   },
 })

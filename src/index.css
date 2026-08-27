@@ -42,13 +42,10 @@
     color: var(--color-white-ghost);
     overflow-x: hidden;
     position: relative;
-    cursor: none;
   }
 
-  @media (pointer: coarse) {
-    body {
-      cursor: auto;
-    }
+  html {
+    scroll-behavior: smooth;
   }
 
   h1,
@@ -58,30 +55,13 @@
   h5,
   h6 {
     font-family: 'Clash Display', system-ui, sans-serif;
-    font-weight: 600;
-    letter-spacing: -0.03em;
+    font-weight: 500;
+    letter-spacing: -0.02em;
   }
 
-  /* Custom Cursor */
-  .custom-cursor {
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--color-electric-purple);
-    pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: difference;
-    transition: transform 0.15s ease;
-  }
-
-  .custom-cursor::before {
-    content: '';
-    position: absolute;
-    inset: -10px;
-    border-radius: 50%;
-    border: 1px solid var(--color-white-ghost);
-    opacity: 0.3;
+  :focus-visible {
+    outline: 2px solid var(--color-electric-purple);
+    outline-offset: 2px;
   }
 }
 
@@ -356,5 +336,54 @@
     to {
       background-position: 200% center;
     }
+  }
+
+  /* Scroll reveal (driven by IntersectionObserver in the demo) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .blob,
+    .animate-liquid-float,
+    .shimmer-text {
+      animation: none;
+    }
+  }
+
+  /* Faint blueprint grid for section backdrops */
+  .bg-grid-faint {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent);
+  }
+
+  /* Thin gradient hairline used as section divider */
+  .hairline {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(168, 85, 247, 0.35),
+      rgba(34, 211, 238, 0.25),
+      transparent
+    );
   }
 }
